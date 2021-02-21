@@ -13,6 +13,8 @@ resource_types:
 
 ## Source Configuration
 
+- `list`: _(required)_ A list of arbitrary objects of the same type/format
+
 ## Behavior
 
 ### `check`
@@ -30,6 +32,8 @@ resource_types:
 no-op
 
 ## Examples
+
+A simple list of strings example. Check `example.yml` for a complex list example.
 
 ```yaml
 resources:
