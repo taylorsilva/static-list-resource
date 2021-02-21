@@ -1,0 +1,52 @@
+resource_types:
+- name: static-list-resource
+  type: registry-image
+  source:
+    repository: taylorsilva/static-list-resource
+
+resources:
+- name: example-list
+  type: static-list-resource
+  source:
+    list:
+    - Kaladin
+    - Shallan
+    - Dalinar
+    - Navani
+
+- name: complex-list
+  type: static-list-resource
+  source:
+    list:
+    - name: Kaladin
+      type: windrunner
+    - name: Shallan
+      type: lightweaver
+    - name: Dalinar
+      type: bondsmith
+    - name: Navani
+      type: bondsmith
+
+jobs:
+- name: list-job
+  plan:
+  - in_parallel:
+    - get: example-list
+    - get: complex-list
+  - task: display-selected-items
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source: { repository: alpine }
+      inputs:
+      - name: example-list
+      - name: complex-list
+      run:
+        path: bash
+        args:
+        - -c
+        - |
+          set +x
+          cat example-list/item
+          cat complex-list/item
