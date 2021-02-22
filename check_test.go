@@ -21,7 +21,14 @@ func (c *CheckTestSuite) TestInitialCheck() {
 	}
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
-	c.Equal(request.Source.List, response, "given no version, it should return the entire list")
+	expected := resource.CheckResponse{
+		resource.Version{Item: "item1"},
+		resource.Version{Item: "item2"},
+		resource.Version{Item: "item3"},
+		resource.Version{Item: "item4"},
+		resource.Version{Item: "item5"},
+	}
+	c.Equal(expected, response, "given no version, it should return the entire list")
 }
 
 func (c *CheckTestSuite) TestReturnNextItem() {
@@ -33,7 +40,10 @@ func (c *CheckTestSuite) TestReturnNextItem() {
 	}
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
-	c.Equal([]interface{}{"item4"}, response, "given item3 it should return item4")
+	expected := resource.CheckResponse{
+		resource.Version{Item: "item4"},
+	}
+	c.Equal(expected, response, "given item3 it should return item4")
 }
 
 func (c *CheckTestSuite) TestReturnFirstItemWhenEndIsReached() {
@@ -45,7 +55,10 @@ func (c *CheckTestSuite) TestReturnFirstItemWhenEndIsReached() {
 	}
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
-	c.Equal([]interface{}{"item1"}, response, "given the last item in the list, it should return the first item")
+	expected := resource.CheckResponse{
+		resource.Version{Item: "item1"},
+	}
+	c.Equal(expected, response, "given the last item in the list, it should return the first item")
 }
 
 func (c *CheckTestSuite) TestLastVersionRemovedFromList() {
@@ -57,7 +70,10 @@ func (c *CheckTestSuite) TestLastVersionRemovedFromList() {
 	}
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
-	c.Equal([]interface{}{"item1"}, response, "first item in list should be returned if given version not found")
+	expected := resource.CheckResponse{
+		resource.Version{Item: "item1"},
+	}
+	c.Equal(expected, response, "first item in list should be returned if given version not found")
 }
 
 func (c *CheckTestSuite) TestErrorIfListIsEmpty() {

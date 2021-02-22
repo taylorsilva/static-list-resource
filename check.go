@@ -10,13 +10,13 @@ func NewCheck() check {
 
 type check struct{}
 
-func (c *check) Run(request CheckRequest) ([]interface{}, error) {
+func (c *check) Run(request CheckRequest) (CheckResponse, error) {
 	if len(request.Source.List) == 0 {
 		return nil, errors.New("empty list provided in resouce's Source. At least one item required")
 	}
 
 	if request.Version == nil {
-		return request.Source.List, nil
+		return convertList(request.Source.List), nil
 	}
 
 	// I wonder if there's a nice way to unmarshal an array
@@ -25,11 +25,19 @@ func (c *check) Run(request CheckRequest) ([]interface{}, error) {
 		if item == request.Version {
 			if (i + 1) == len(request.Source.List) {
 				// reached end of list, return first item
-				return []interface{}{request.Source.List[0]}, nil
+				return convertList([]interface{}{request.Source.List[0]}), nil
 			}
-			return []interface{}{request.Source.List[i+1]}, nil
+			return convertList([]interface{}{request.Source.List[i+1]}), nil
 		}
 	}
 
-	return []interface{}{request.Source.List[0]}, nil
+	return convertList([]interface{}{request.Source.List[0]}), nil
+}
+
+func convertList(list []interface{}) CheckResponse {
+	var response CheckResponse
+	for _, v := range list {
+		response = append(response, Version{Item: v})
+	}
+	return response
 }
