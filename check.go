@@ -17,7 +17,7 @@ type check struct{}
 
 func (c *check) Run(request Request) ([]interface{}, error) {
 	if len(request.Source.List) == 0 {
-		return nil, errors.New("empty list provided. At least one item required")
+		return nil, errors.New("empty list provided in resouce's Source. At least one item required")
 	}
 
 	if request.Version == nil {

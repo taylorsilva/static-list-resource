@@ -21,7 +21,7 @@ func (c *CheckTestSuite) TestInitialCheck() {
 	}
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
-	c.Equal(request.Source.List, response)
+	c.Equal(request.Source.List, response, "given no version, it should return the entire list")
 }
 
 func (c *CheckTestSuite) TestReturnNextItem() {
@@ -33,7 +33,7 @@ func (c *CheckTestSuite) TestReturnNextItem() {
 	}
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
-	c.Equal([]interface{}{"item4"}, response)
+	c.Equal([]interface{}{"item4"}, response, "given item3 it should return item4")
 }
 
 func (c *CheckTestSuite) TestReturnFirstItemWhenEndIsReached() {
@@ -45,7 +45,7 @@ func (c *CheckTestSuite) TestReturnFirstItemWhenEndIsReached() {
 	}
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
-	c.Equal([]interface{}{"item1"}, response)
+	c.Equal([]interface{}{"item1"}, response, "given the last item in the list, it should return the first item")
 }
 
 func (c *CheckTestSuite) TestLastVersionRemovedFromList() {
@@ -69,7 +69,7 @@ func (c *CheckTestSuite) TestErrorIfListIsEmpty() {
 	}
 	check := resource.NewCheck()
 	_, err := check.Run(request)
-	c.EqualError(err, "empty list provided. At least one item required")
+	c.EqualError(err, "empty list provided in resouce's Source. At least one item required")
 }
 
 func TestCheckSuite(t *testing.T) {
