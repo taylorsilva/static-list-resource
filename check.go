@@ -15,14 +15,14 @@ func (c *check) Run(request CheckRequest) (CheckResponse, error) {
 		return nil, errors.New("empty list provided in resouce's Source. At least one item required")
 	}
 
-	if request.Version == nil {
+	if request.Version.Item == nil {
 		return convertList(request.Source.List), nil
 	}
 
 	// I wonder if there's a nice way to unmarshal an array
 	// into a container/ring
 	for i, item := range request.Source.List {
-		if item == request.Version {
+		if item == request.Version.Item {
 			if (i + 1) == len(request.Source.List) {
 				// reached end of list, return first item
 				return convertList([]interface{}{request.Source.List[0]}), nil

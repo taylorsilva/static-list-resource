@@ -36,7 +36,7 @@ func (c *CheckTestSuite) TestReturnNextItem() {
 		Source: resource.Source{
 			List: []interface{}{"item1", "item2", "item3", "item4", "item5"},
 		},
-		Version: "item3",
+		Version: resource.Version{Item: "item3"},
 	}
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
@@ -51,7 +51,7 @@ func (c *CheckTestSuite) TestReturnFirstItemWhenEndIsReached() {
 		Source: resource.Source{
 			List: []interface{}{"item1", "item2", "item3", "item4", "item5"},
 		},
-		Version: "item5",
+		Version: resource.Version{Item: "item5"},
 	}
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
@@ -66,7 +66,7 @@ func (c *CheckTestSuite) TestLastVersionRemovedFromList() {
 		Source: resource.Source{
 			List: []interface{}{"item1", "item2", "item3", "item4", "item5"},
 		},
-		Version: "item6",
+		Version: resource.Version{Item: "item6"},
 	}
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
@@ -81,7 +81,7 @@ func (c *CheckTestSuite) TestErrorIfListIsEmpty() {
 		Source: resource.Source{
 			List: []interface{}{},
 		},
-		Version: "item2",
+		Version: resource.Version{Item: "item2"},
 	}
 	check := resource.NewCheck()
 	_, err := check.Run(request)
