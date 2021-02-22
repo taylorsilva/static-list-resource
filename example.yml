@@ -7,6 +7,7 @@ resource_types:
 resources:
 - name: example-list
   type: static-list-resource
+  check_every: never
   source:
     list:
     - Kaladin
@@ -16,15 +17,21 @@ resources:
 
 - name: complex-list
   type: static-list-resource
+  check_every: never
   source:
+    # list must always be of type string
     list:
-    - name: Kaladin
+    - |
+      name: Kaladin
       type: windrunner
-    - name: Shallan
+    - |
+      name: Shallan
       type: lightweaver
-    - name: Dalinar
+    - |
+      name: Dalinar
       type: bondsmith
-    - name: Navani
+    - |
+      name: Navani
       type: bondsmith
 
 jobs:
@@ -43,10 +50,9 @@ jobs:
       - name: example-list
       - name: complex-list
       run:
-        path: bash
+        path: sh
         args:
-        - -c
+        - -cx
         - |
-          set +x
           cat example-list/item
           cat complex-list/item

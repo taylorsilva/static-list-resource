@@ -1,11 +1,11 @@
 package resource
 
 type Source struct {
-	List []interface{} `json:"list"`
+	List []string `json:"list"`
 }
 
 type Version struct {
-	Item interface{} `json:"item"`
+	Item string `json:"item"`
 }
 
 type CheckRequest struct {

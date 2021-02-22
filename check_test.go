@@ -16,17 +16,17 @@ type CheckTestSuite struct {
 func (c *CheckTestSuite) TestInitialCheck() {
 	request := resource.CheckRequest{
 		Source: resource.Source{
-			List: []interface{}{"item1", "item2", "item3", "item4", "item5"},
+			List: []string{"item1", "item2", "item3", "item4", "item5"},
 		},
 	}
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
 	expected := resource.CheckResponse{
-		resource.Version{Item: "item1"},
-		resource.Version{Item: "item2"},
-		resource.Version{Item: "item3"},
-		resource.Version{Item: "item4"},
 		resource.Version{Item: "item5"},
+		resource.Version{Item: "item4"},
+		resource.Version{Item: "item3"},
+		resource.Version{Item: "item2"},
+		resource.Version{Item: "item1"},
 	}
 	c.Equal(expected, response, "given no version, it should return the entire list")
 }
@@ -34,7 +34,7 @@ func (c *CheckTestSuite) TestInitialCheck() {
 func (c *CheckTestSuite) TestReturnNextItem() {
 	request := resource.CheckRequest{
 		Source: resource.Source{
-			List: []interface{}{"item1", "item2", "item3", "item4", "item5"},
+			List: []string{"item1", "item2", "item3", "item4", "item5"},
 		},
 		Version: resource.Version{Item: "item3"},
 	}
@@ -49,7 +49,7 @@ func (c *CheckTestSuite) TestReturnNextItem() {
 func (c *CheckTestSuite) TestReturnFirstItemWhenEndIsReached() {
 	request := resource.CheckRequest{
 		Source: resource.Source{
-			List: []interface{}{"item1", "item2", "item3", "item4", "item5"},
+			List: []string{"item1", "item2", "item3", "item4", "item5"},
 		},
 		Version: resource.Version{Item: "item5"},
 	}
@@ -64,7 +64,7 @@ func (c *CheckTestSuite) TestReturnFirstItemWhenEndIsReached() {
 func (c *CheckTestSuite) TestLastVersionRemovedFromList() {
 	request := resource.CheckRequest{
 		Source: resource.Source{
-			List: []interface{}{"item1", "item2", "item3", "item4", "item5"},
+			List: []string{"item1", "item2", "item3", "item4", "item5"},
 		},
 		Version: resource.Version{Item: "item6"},
 	}
@@ -79,7 +79,7 @@ func (c *CheckTestSuite) TestLastVersionRemovedFromList() {
 func (c *CheckTestSuite) TestErrorIfListIsEmpty() {
 	request := resource.CheckRequest{
 		Source: resource.Source{
-			List: []interface{}{},
+			List: []string{},
 		},
 		Version: resource.Version{Item: "item2"},
 	}
