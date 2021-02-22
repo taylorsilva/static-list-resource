@@ -14,7 +14,7 @@ type CheckTestSuite struct {
 }
 
 func (c *CheckTestSuite) TestInitialCheck() {
-	request := resource.Request{
+	request := resource.CheckRequest{
 		Source: resource.Source{
 			List: []interface{}{"item1", "item2", "item3", "item4", "item5"},
 		},
@@ -25,7 +25,7 @@ func (c *CheckTestSuite) TestInitialCheck() {
 }
 
 func (c *CheckTestSuite) TestReturnNextItem() {
-	request := resource.Request{
+	request := resource.CheckRequest{
 		Source: resource.Source{
 			List: []interface{}{"item1", "item2", "item3", "item4", "item5"},
 		},
@@ -37,7 +37,7 @@ func (c *CheckTestSuite) TestReturnNextItem() {
 }
 
 func (c *CheckTestSuite) TestReturnFirstItemWhenEndIsReached() {
-	request := resource.Request{
+	request := resource.CheckRequest{
 		Source: resource.Source{
 			List: []interface{}{"item1", "item2", "item3", "item4", "item5"},
 		},
@@ -49,7 +49,7 @@ func (c *CheckTestSuite) TestReturnFirstItemWhenEndIsReached() {
 }
 
 func (c *CheckTestSuite) TestLastVersionRemovedFromList() {
-	request := resource.Request{
+	request := resource.CheckRequest{
 		Source: resource.Source{
 			List: []interface{}{"item1", "item2", "item3", "item4", "item5"},
 		},
@@ -61,7 +61,7 @@ func (c *CheckTestSuite) TestLastVersionRemovedFromList() {
 }
 
 func (c *CheckTestSuite) TestErrorIfListIsEmpty() {
-	request := resource.Request{
+	request := resource.CheckRequest{
 		Source: resource.Source{
 			List: []interface{}{},
 		},

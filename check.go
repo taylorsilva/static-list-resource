@@ -2,12 +2,7 @@ package resource
 
 import (
 	"errors"
-	"fmt"
 )
-
-func main() {
-	fmt.Println("vim-go")
-}
 
 func NewCheck() check {
 	return check{}
@@ -15,7 +10,7 @@ func NewCheck() check {
 
 type check struct{}
 
-func (c *check) Run(request Request) ([]interface{}, error) {
+func (c *check) Run(request CheckRequest) ([]interface{}, error) {
 	if len(request.Source.List) == 0 {
 		return nil, errors.New("empty list provided in resouce's Source. At least one item required")
 	}

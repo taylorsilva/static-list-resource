@@ -1,6 +1,6 @@
 package resource
 
-type Request struct {
+type CheckRequest struct {
 	Source  Source      `json:"source"`
 	Version interface{} `json:"version"`
 }
