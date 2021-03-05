@@ -2,6 +2,7 @@ package resource
 
 import (
 	"errors"
+	"time"
 )
 
 func NewCheck() check {
@@ -16,22 +17,40 @@ func (c *check) Run(request CheckRequest) (CheckResponse, error) {
 	}
 
 	if request.Version.Item == "" {
-		return convertList(request.Source.List), nil
+		return CheckResponse{
+			Version{
+				Item: request.Source.List[0],
+				Date: time.Now(),
+			},
+		}, nil
 	}
 
-	// I wonder if there's a nice way to unmarshal an array
-	// into a container/ring
 	for i, item := range request.Source.List {
 		if item == request.Version.Item {
 			if (i + 1) == len(request.Source.List) {
 				// reached end of list, return first item
-				return convertList([]string{request.Source.List[0]}), nil
+				return CheckResponse{
+					Version{
+						Item: request.Source.List[0],
+						Date: time.Now(),
+					},
+				}, nil
 			}
-			return convertList([]string{request.Source.List[i+1]}), nil
+			return CheckResponse{
+				Version{
+					Item: request.Source.List[i+1],
+					Date: time.Now(),
+				},
+			}, nil
 		}
 	}
 
-	return convertList([]string{request.Source.List[0]}), nil
+	return CheckResponse{
+		Version{
+			Item: request.Source.List[0],
+			Date: time.Now(),
+		},
+	}, nil
 }
 
 func convertList(list []string) CheckResponse {

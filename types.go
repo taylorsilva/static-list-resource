@@ -1,11 +1,14 @@
 package resource
 
+import "time"
+
 type Source struct {
 	List []string `json:"list"`
 }
 
 type Version struct {
-	Item string `json:"item"`
+	Item string    `json:"item"`
+	Date time.Time `json:"date"`
 }
 
 type CheckRequest struct {

@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
-	fmt.Println("todo: no-op")
+	fmt.Println("The out/put step is not implemented")
+	os.Exit(1)
 }

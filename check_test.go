@@ -2,6 +2,7 @@ package resource_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -22,13 +23,10 @@ func (c *CheckTestSuite) TestInitialCheck() {
 	check := resource.NewCheck()
 	response, _ := check.Run(request)
 	expected := resource.CheckResponse{
-		resource.Version{Item: "item5"},
-		resource.Version{Item: "item4"},
-		resource.Version{Item: "item3"},
-		resource.Version{Item: "item2"},
 		resource.Version{Item: "item1"},
 	}
-	c.Equal(expected, response, "given no version, it should return the entire list")
+	c.Equal(expected[0].Item, response[0].Item, "given no version, it should return the first item")
+	c.NotEqual(time.Time{}, response[0].Date, "time is not nil/default time.Time")
 }
 
 func (c *CheckTestSuite) TestReturnNextItem() {
@@ -43,7 +41,8 @@ func (c *CheckTestSuite) TestReturnNextItem() {
 	expected := resource.CheckResponse{
 		resource.Version{Item: "item4"},
 	}
-	c.Equal(expected, response, "given item3 it should return item4")
+	c.Equal(expected[0].Item, response[0].Item, "given item3 it should return item4")
+	c.NotEqual(time.Time{}, response[0].Date, "time is not nil/default time.Time")
 }
 
 func (c *CheckTestSuite) TestReturnFirstItemWhenEndIsReached() {
@@ -58,7 +57,8 @@ func (c *CheckTestSuite) TestReturnFirstItemWhenEndIsReached() {
 	expected := resource.CheckResponse{
 		resource.Version{Item: "item1"},
 	}
-	c.Equal(expected, response, "given the last item in the list, it should return the first item")
+	c.Equal(expected[0].Item, response[0].Item, "given the last item in the list, it should return the first item")
+	c.NotEqual(time.Time{}, response[0].Date, "time is not nil/default time.Time")
 }
 
 func (c *CheckTestSuite) TestLastVersionRemovedFromList() {
@@ -73,7 +73,8 @@ func (c *CheckTestSuite) TestLastVersionRemovedFromList() {
 	expected := resource.CheckResponse{
 		resource.Version{Item: "item1"},
 	}
-	c.Equal(expected, response, "first item in list should be returned if given version not found")
+	c.Equal(expected[0].Item, response[0].Item, "first item in list should be returned if given version not found")
+	c.NotEqual(time.Time{}, response[0].Date, "time is not nil/default time.Time")
 }
 
 func (c *CheckTestSuite) TestErrorIfListIsEmpty() {
