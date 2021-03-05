@@ -38,7 +38,7 @@ jobs:
       inputs:
         - name: repo
       run:
-        path: bash
+        path: sh
         args:
           - -cx
           - |
