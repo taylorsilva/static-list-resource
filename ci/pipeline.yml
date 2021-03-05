@@ -34,6 +34,8 @@ jobs:
         type: registry-image
         source:
           repository: golang-alpine
+          username: ((docker.username))
+          password: ((docker.password))
       inputs:
         - name: repo
       run:
