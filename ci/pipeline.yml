@@ -1,0 +1,71 @@
+resources:
+- name: static-list-image
+  type: registry-image
+  check_every: never
+  source:
+    repository: taylorsilva/static-list-resource
+    username: ((docker.username))
+    password: ((docker.password))
+
+- name: repo
+  icon: github
+  type: git
+  source:
+    uri: git@github.com:taylorsilva/static-list-resource.git
+    private_key: ((private_key))
+
+jobs:
+- name: update-self
+  plan:
+  - get: repo
+    trigger: true
+  - set_pipeline: self
+    file: repo/ci/pipeline.yml
+
+- name: unit-tests
+  plan:
+  - get: repo
+    passed: [update-self]
+    trigger: true
+  - task: unit-tests
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source:
+          repository: golang-alpine
+      inputs:
+        - name: repo
+      run:
+        path: bash
+        args:
+          - -cx
+          - |
+            cd repo
+            go mod download
+            make test
+
+- name: publish-image
+  plan:
+  - get: repo
+    passed: [unit-tests]
+    trigger: true
+  - task: build-image
+    privileged: true
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source:
+          repository: vito/oci-build-task
+      inputs:
+        - name: repo
+      outputs:
+        - name: image
+      params:
+        CONTEXT: repo
+      run:
+        path: build
+  - put: static-list-image
+    params:
+      image: image/image.tar
