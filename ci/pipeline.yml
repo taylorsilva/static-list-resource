@@ -4,6 +4,7 @@ resources:
   check_every: never
   source:
     repository: taylorsilva/static-list-resource
+    tag: latest
     username: ((docker.username))
     password: ((docker.password))
 
