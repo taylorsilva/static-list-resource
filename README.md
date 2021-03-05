@@ -13,19 +13,20 @@ resource_types:
 
 ## Source Configuration
 
-- `list`: _(required)_ A list of arbitrary objects of the same type/format
+- `list`: _(required)_ A list of strings. Can be single or multi-line strings.
 
 ## Behavior
 
 ### `check`
 
-- first check will output the entire list
-- every check after will select the next item in the list as the "latest version"
+- The first check returns the first item in the list
+- every check after will return the next item in the list as the "latest version"
+- You'll probably want to set the resource to `check_every: never` to avoid having the list shift on you
 
 ### `in` / get step
 
 - always returns the passed in version
-- stored in a file called `item` in json format
+- stores version in a file called `item`
 
 ### `out` / put step
 
