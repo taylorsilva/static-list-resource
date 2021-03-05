@@ -1,6 +1,6 @@
 
 test:
-	go test ./...
+	go test -count=1 ./...
 
-build: test
+build:
 	docker build -t taylorsilva/static-list-resource .
