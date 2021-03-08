@@ -34,9 +34,8 @@ resource_types:
 
 - Returns the next item in the list via the implicit `get` step. Requires the previous item to be passed in.
 - If no previous item is passed in then it returns the first item in the list
-
-#### params
-- `previous`: _(required)_ The path to the previous item (e.g. `my-list/item`)
+- **params**
+  - `previous`: _(required)_ The path to the previous item (e.g. `my-list/item`)
 
 ## Examples
 
