@@ -1,6 +1,6 @@
 # Static List Resource
 
-A static list resource for [Concourse](https://github.com/concourse/concourse/).
+A static list resource for [Concourse](https://github.com/concourse/concourse/). It iterates over items in a given list.
 
 Add it to your pipeline:
 ```yaml
@@ -20,17 +20,21 @@ resource_types:
 ### `check`
 
 - The first check returns the first item in the list
-- every check after will return the next item in the list as the "latest version"
+- Every check after will return the next item in the list as the "latest version"
 - You'll probably want to set the resource to `check_every: never` to avoid having the list shift on you
 
 ### `in` / get step
 
-- always returns the passed in version
-- stores version in a file called `item`
+- Always returns the passed in version
+- Stores version in a file called `item`
 
 ### `out` / put step
 
-no-op
+- Returns the next item in the list via the implicit `get` step. Requires the previous item to be passed in.
+- If no previous item is passed in then it returns the first item in the list
+
+#### params
+- `previous`: _(required)_ The path to the previous item (e.g. `my-list/item`)
 
 ## Examples
 
@@ -50,7 +54,8 @@ resources:
 jobs:
 - name: list-job
   plan:
-  - get: example-list
+  - get: first
+    resource: example-list
   - task: display-selected-item
     config:
       platform: linux
@@ -58,8 +63,23 @@ jobs:
         type: registry-image
         source: { repository: busybox }
       inputs:
-      - name: example-list
+      - name: fist
       run:
         path: cat
-        args: ["example-list/item"]
+        args: ["first/item"]
+  - put: next-item
+    resource: example-list
+    params:
+      previous: first/item
+  - task: display-selected-item
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source: { repository: busybox }
+      inputs:
+      - name: next-item
+      run:
+        path: cat
+        args: ["next-item/item"]
 ```

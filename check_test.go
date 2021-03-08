@@ -81,6 +81,8 @@ func (c *CheckTestSuite) TestCheck() {
 		}
 		if test.ExpctedErr != "" {
 			c.EqualError(err, test.ExpctedErr)
+		} else {
+			c.NoError(err)
 		}
 	}
 }

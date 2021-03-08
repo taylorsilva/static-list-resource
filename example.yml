@@ -56,3 +56,18 @@ jobs:
         - |
           cat example-list/item
           cat complex-list/item
+  - put: next-item
+    resource: example-list
+    params:
+      previous: example-list/item
+  - task: display-selected-item
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source: { repository: busybox }
+      inputs:
+      - name: next-item
+      run:
+        path: cat
+        args: ["next-item/item"]

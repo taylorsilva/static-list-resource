@@ -14,7 +14,7 @@ func main() {
 	decorder.DisallowUnknownFields()
 	err := decorder.Decode(&request)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to unmarshal check request: %s", err)
+		fmt.Fprintf(os.Stderr, "failed to unmarshal get request: %s", err)
 		os.Exit(1)
 	}
 
@@ -23,7 +23,7 @@ func main() {
 	path := os.Args[1]
 	response, err := in.Run(request, path)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "check error: %s", err)
+		fmt.Fprintf(os.Stderr, "get error: %s", err)
 		os.Exit(1)
 	}
 

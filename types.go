@@ -26,3 +26,17 @@ type InRequest struct {
 type InResponse struct {
 	Version Version `json:"version"`
 }
+
+type OutRequest struct {
+	Source Source    `json:"source"`
+	Params OutParams `json:"params"`
+}
+
+type OutParams struct {
+	// Path to a file containing the previous version
+	Previous string `json:"previous"`
+}
+
+type OutResponse struct {
+	Version Version `json:"version"`
+}
