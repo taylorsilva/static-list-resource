@@ -45,7 +45,7 @@ jobs:
           - |
             cd repo
             go mod download
-            CGO_ENABLED=0 go test ./...
+            CGO_ENABLED=0 go test -v ./...
 
 - name: publish-image
   plan:

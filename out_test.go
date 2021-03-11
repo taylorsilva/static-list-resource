@@ -17,7 +17,7 @@ type OutTestSuite struct {
 }
 
 func (o *OutTestSuite) TestOut() {
-	tests := []struct {
+	tests := map[string]struct {
 		Description     string
 		Request         resource.OutRequest
 		ArtifactPath    string
@@ -25,8 +25,7 @@ func (o *OutTestSuite) TestOut() {
 		PreviousVersion string
 		ExpctedErr      string
 	}{
-		{
-			Description: "returns first item if no previous version is found",
+		"returns first item if no previous version is found": {
 			Request: resource.OutRequest{
 				Source: resource.Source{
 					List: []string{"item1", "item2", "item3", "item4", "item5"},
@@ -39,8 +38,7 @@ func (o *OutTestSuite) TestOut() {
 			PreviousVersion: "",
 			ExpectedVersion: resource.Version{Item: "item1"},
 		},
-		{
-			Description: "returns next item when previous version provided",
+		"returns next item when previous version provided": {
 			Request: resource.OutRequest{
 				Source: resource.Source{
 					List: []string{"item1", "item2", "item3", "item4", "item5"},
@@ -53,8 +51,7 @@ func (o *OutTestSuite) TestOut() {
 			PreviousVersion: "item2",
 			ExpectedVersion: resource.Version{Item: "item3"},
 		},
-		{
-			Description: "returns first item if end of list is reached",
+		"returns first item if end of list is reached": {
 			Request: resource.OutRequest{
 				Source: resource.Source{
 					List: []string{"item1", "item2", "item3", "item4", "item5"},
@@ -67,9 +64,8 @@ func (o *OutTestSuite) TestOut() {
 			PreviousVersion: "item5",
 			ExpectedVersion: resource.Version{Item: "item1"},
 		},
-		{
-			Description: "returns error when source list is empty",
-			ExpctedErr:  "empty list provided in resouce's Source. At least one item required",
+		"returns error when source list is empty": {
+			ExpctedErr: "empty list provided in resouce's Source. At least one item required",
 			Request: resource.OutRequest{
 				Source: resource.Source{
 					List: []string{},
@@ -80,9 +76,8 @@ func (o *OutTestSuite) TestOut() {
 			},
 			ArtifactPath: o.T().TempDir(),
 		},
-		{
-			Description: "returns error when no file is provided",
-			ExpctedErr:  "no file provided with previous version",
+		"returns error when no file is provided": {
+			ExpctedErr: "no file provided with previous version",
 			Request: resource.OutRequest{
 				Source: resource.Source{
 					List: []string{"item1", "item2", "item3", "item4", "item5"},
@@ -91,25 +86,27 @@ func (o *OutTestSuite) TestOut() {
 		},
 	}
 
-	for _, t := range tests {
-		if t.Request.Params.Previous != "" {
-			pf := filepath.Join(t.ArtifactPath, t.Request.Params.Previous)
-			os.WriteFile(pf, []byte(t.PreviousVersion), 0666)
-		}
+	for name, tc := range tests {
+		o.Run(name, func() {
+			if tc.Request.Params.Previous != "" {
+				pf := filepath.Join(tc.ArtifactPath, tc.Request.Params.Previous)
+				os.WriteFile(pf, []byte(tc.PreviousVersion), 0666)
+			}
 
-		out := resource.NewOut()
-		response, err := out.Run(t.Request, t.ArtifactPath)
+			out := resource.NewOut()
+			response, err := out.Run(tc.Request, tc.ArtifactPath)
 
-		if t.ExpectedVersion.Item != "" {
-			o.Equal(t.ExpectedVersion.Item, response.Version.Item, t.Description)
-			o.NotEqual(time.Time{}, response.Version.Date, "time is not nil/default time.Time")
-		}
+			if tc.ExpectedVersion.Item != "" {
+				o.Equal(tc.ExpectedVersion.Item, response.Version.Item)
+				o.NotEqual(time.Time{}, response.Version.Date, "time should not be default time.Time")
+			}
 
-		if t.ExpctedErr != "" {
-			o.EqualError(err, t.ExpctedErr, t.Description)
-		} else {
-			o.NoError(err)
-		}
+			if tc.ExpctedErr != "" {
+				o.EqualError(err, tc.ExpctedErr, tc.Description)
+			} else {
+				o.NoError(err)
+			}
+		})
 	}
 }
 

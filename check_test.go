@@ -15,14 +15,13 @@ type CheckTestSuite struct {
 }
 
 func (c *CheckTestSuite) TestCheck() {
-	tests := []struct {
+	tests := map[string]struct {
 		Description     string
 		Request         resource.CheckRequest
 		ExpectedVersion resource.Version
 		ExpctedErr      string
 	}{
-		{
-			Description: "given no version, it should return the first item",
+		"given no version, it should return the first item": {
 			Request: resource.CheckRequest{
 				Source: resource.Source{
 					List: []string{"item1", "item2", "item3", "item4", "item5"},
@@ -30,8 +29,7 @@ func (c *CheckTestSuite) TestCheck() {
 			},
 			ExpectedVersion: resource.Version{Item: "item1"},
 		},
-		{
-			Description: "should return the next item: given item3 it should return item4",
+		"should return the next item: given item3 it should return item4": {
 			Request: resource.CheckRequest{
 				Source: resource.Source{
 					List: []string{"item1", "item2", "item3", "item4", "item5"},
@@ -40,8 +38,7 @@ func (c *CheckTestSuite) TestCheck() {
 			},
 			ExpectedVersion: resource.Version{Item: "item4"},
 		},
-		{
-			Description: "given the last item in the list, it should return the first item",
+		"given the last item in the list, it should return the first item": {
 			Request: resource.CheckRequest{
 				Source: resource.Source{
 					List: []string{"item1", "item2", "item3", "item4", "item5"},
@@ -50,8 +47,7 @@ func (c *CheckTestSuite) TestCheck() {
 			},
 			ExpectedVersion: resource.Version{Item: "item1"},
 		},
-		{
-			Description: "first item in list should be returned if given version is not found",
+		"first item in list should be returned if given version is not found": {
 			Request: resource.CheckRequest{
 				Source: resource.Source{
 					List: []string{"item1", "item2", "item3", "item4", "item5"},
@@ -60,8 +56,7 @@ func (c *CheckTestSuite) TestCheck() {
 			},
 			ExpectedVersion: resource.Version{Item: "item1"},
 		},
-		{
-			Description: "first item in list should be returned if given version is not found",
+		"return error when source list is empty": {
 			Request: resource.CheckRequest{
 				Source: resource.Source{
 					List: []string{},
@@ -72,18 +67,20 @@ func (c *CheckTestSuite) TestCheck() {
 		},
 	}
 
-	for _, test := range tests {
-		check := resource.NewCheck()
-		response, err := check.Run(test.Request)
-		if response != nil {
-			c.Equal(test.ExpectedVersion.Item, response[0].Item, test.Description)
-			c.NotEqual(time.Time{}, response[0].Date, "time is not nil/default time.Time")
-		}
-		if test.ExpctedErr != "" {
-			c.EqualError(err, test.ExpctedErr)
-		} else {
-			c.NoError(err)
-		}
+	for name, tc := range tests {
+		c.Run(name, func() {
+			check := resource.NewCheck()
+			response, err := check.Run(tc.Request)
+			if response != nil {
+				c.Equal(tc.ExpectedVersion.Item, response[0].Item, tc.Description)
+				c.NotEqual(time.Time{}, response[0].Date, "time is not nil/default time.Time")
+			}
+			if tc.ExpctedErr != "" {
+				c.EqualError(err, tc.ExpctedErr)
+			} else {
+				c.NoError(err)
+			}
+		})
 	}
 }
 
