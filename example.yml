@@ -7,7 +7,6 @@ resource_types:
 resources:
 - name: example-list
   type: static-list-resource
-  check_every: never
   source:
     list:
     - Kaladin
@@ -17,7 +16,6 @@ resources:
 
 - name: complex-list
   type: static-list-resource
-  check_every: never
   source:
     # list must always be of type string
     list:

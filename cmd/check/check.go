@@ -31,5 +31,4 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error encoding response to json: %s", err)
 		os.Exit(1)
 	}
-	fmt.Fprintf(os.Stderr, "next version: %s", response[0].Item)
 }
