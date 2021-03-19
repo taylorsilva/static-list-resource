@@ -22,8 +22,7 @@ resource_types:
 ### `check`
 
 - The first check returns the first item in the list
-- Every check after will return the next item in the list as the "latest version"
-- You'll probably want to set the resource to `check_every: never` to avoid having the list shift on you
+- Every check after will return nothing
 
 ### `in` / get step
 

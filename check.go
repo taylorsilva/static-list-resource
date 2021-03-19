@@ -25,23 +25,9 @@ func (c *check) Run(request CheckRequest) (CheckResponse, error) {
 		}, nil
 	}
 
-	for i, item := range request.Source.List {
+	for _, item := range request.Source.List {
 		if item == request.Version.Item {
-			if (i + 1) == len(request.Source.List) {
-				// reached end of list, return first item
-				return CheckResponse{
-					Version{
-						Item: request.Source.List[0],
-						Date: time.Now(),
-					},
-				}, nil
-			}
-			return CheckResponse{
-				Version{
-					Item: request.Source.List[i+1],
-					Date: time.Now(),
-				},
-			}, nil
+			return CheckResponse{}, nil
 		}
 	}
 
@@ -51,12 +37,4 @@ func (c *check) Run(request CheckRequest) (CheckResponse, error) {
 			Date: time.Now(),
 		},
 	}, nil
-}
-
-func convertList(list []string) CheckResponse {
-	var response CheckResponse
-	for _, v := range list {
-		response = append([]Version{{Item: v}}, response...)
-	}
-	return response
 }
