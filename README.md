@@ -40,6 +40,8 @@ resource_types:
 
 A simple list of strings example. Check `example.yml` for a complex list example.
 
+In general, you should start with a `get` step and then end with a `put` step to ensure the next time the job runs it picks up the next item in the list. The `put` step is how you iterate over the list.
+
 ```yaml
 resources:
 - name: example-list
