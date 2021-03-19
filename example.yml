@@ -71,3 +71,7 @@ jobs:
       run:
         path: cat
         args: ["next-item/item"]
+  - put: next-item
+    resource: complex-list
+    params:
+      previous: complex-list/item
