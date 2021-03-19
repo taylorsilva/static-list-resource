@@ -16,6 +16,7 @@ resource_types:
 ## Source Configuration
 
 - `list`: _(required)_ A list of strings. Can be single or multi-line strings.
+- `unique`: _(optional)_ Pass in a random string here. Use this if you have the exact same list in multiple resource declarations. Concourse will consider them the same if you have global resources enabled.
 
 ## Behavior
 

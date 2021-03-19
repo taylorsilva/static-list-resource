@@ -4,6 +4,8 @@ import "time"
 
 type Source struct {
 	List []string `json:"list"`
+	// A hack to avoid global resources behaviour
+	Unique string `json:"unique"`
 }
 
 type Version struct {
