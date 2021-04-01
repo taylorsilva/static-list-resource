@@ -38,6 +38,9 @@ jobs:
   - in_parallel:
     - get: example-list
     - get: complex-list
+  - load_var: item
+    file: complex-list/item
+    format: yml
   - task: display-selected-items
     config:
       platform: linux
@@ -47,6 +50,9 @@ jobs:
       inputs:
       - name: example-list
       - name: complex-list
+      params:
+        NAME: ((.:item.name))
+        TYPE: ((.:item.type))
       run:
         path: sh
         args:
@@ -54,6 +60,8 @@ jobs:
         - |
           cat example-list/item
           cat complex-list/item
+          echo $NAME
+          echo $TYPE
   - put: next-item
     resource: example-list
     params:
