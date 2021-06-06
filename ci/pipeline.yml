@@ -11,6 +11,7 @@ resources:
 - name: repo
   icon: github
   type: git
+  check_every: 15m
   source:
     uri: git@github.com:taylorsilva/static-list-resource.git
     private_key: ((private_key))
