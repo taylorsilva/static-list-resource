@@ -13,7 +13,7 @@ resources:
   type: git
   check_every: 15m
   source:
-    uri: git@github.com:taylorsilva/static-list-resource.git
+    uri: https://github.com/taylorsilva/static-list-resource.git
     private_key: ((private_key))
 
 jobs:
