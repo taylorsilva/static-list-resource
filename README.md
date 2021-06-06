@@ -2,7 +2,7 @@
 
 A static list resource for [Concourse](https://github.com/concourse/concourse/). It iterates over items in a given list.
 
-![build-status](https://ci.concourse-ci.org/api/v1/teams/tay/pipelines/static-list-resource/jobs/unit-tests/badge)
+![build-status](https://ci.taydev.net/api/v1/teams/main/pipelines/static-list-resource/jobs/unit-tests/badge)
 
 Add it to your pipeline:
 ```yaml
