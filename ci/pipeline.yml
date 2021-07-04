@@ -21,17 +21,17 @@ resources:
       - example.yml
 
 jobs:
-- name: update-self
-  plan:
-  - get: repo
-    trigger: true
-  - set_pipeline: self
-    file: repo/ci/pipeline.yml
+# - name: update-self
+#   plan:
+#   - get: repo
+#     trigger: true
+#   - set_pipeline: self
+#     file: repo/ci/pipeline.yml
 
 - name: unit-tests
   plan:
   - get: repo
-    passed: [update-self]
+    # passed: [update-self]
     trigger: true
   - task: unit-tests
     config:
